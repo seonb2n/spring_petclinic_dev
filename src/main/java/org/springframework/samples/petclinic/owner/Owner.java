@@ -15,6 +15,8 @@
  */
 package org.springframework.samples.petclinic.owner;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,6 +61,11 @@ public class Owner extends Person {
 	@Digits(fraction = 0, integer = 10)
 	private String telephone;
 
+	@Column(name = "age")
+	@Min(value = 1, message = "나이는 1살 이상이어야 합니다.")
+	@Max(value = 98, message = "나이는 100살 이하여야 합니다.") // 1살부터 100살까지 허용하려면 100로 설정합니다.
+	private int age;
+
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "owner_id")
 	@OrderBy("name")
@@ -86,6 +93,14 @@ public class Owner extends Person {
 
 	public void setTelephone(String telephone) {
 		this.telephone = telephone;
+	}
+
+	public int getAge() {
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
 	}
 
 	public List<Pet> getPets() {
@@ -151,6 +166,7 @@ public class Owner extends Person {
 			.append("address", this.address)
 			.append("city", this.city)
 			.append("telephone", this.telephone)
+			.append("age", this.age)
 			.toString();
 	}
 
